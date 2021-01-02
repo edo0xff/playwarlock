@@ -1,7 +1,7 @@
 
-# playwarez download script
+# PlayWarlock
 
-Script para descargar series de [playwarez.cc](playwarez.cc)
+Script para descargar series y películas fácil, rápido, gratis y sin anuncios.
 
 ## Instalación
 
@@ -80,6 +80,7 @@ Rutas soportadas por la API:
 ## ToDo
 
 - Hacer que funcione con más páginas
+- crear un cliente web para la API
 
 ## Contributors
 

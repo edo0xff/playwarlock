@@ -72,15 +72,60 @@ Rutas soportadas por la API:
 	- Ejemplo
 		- /api/v0.1/video_source?url=https://playwarez.cc/episode/juego-de-tronos-season-4-episode-8
 
-## Webs soportadas
+## Cómo contribuir
+
+### Añadir soporte para más páginas
+
+- Crear la librería dentro de */libs* nombrando el archivo de la librería de la siguiente manera: *_paginadeseries_com.py*
+- Dentro crear una clase nombrada de la siguiente manera: *PaginaDeSeriesCOM*, la clase debe tener la siguiente estructura y métodos:
+
+
+		class PaginaDeSeriesCOM:
+			def isUrlForThisSite(self, url):
+				return True if 'paginadeseries.com' in url else False
+
+			def search(self, query):
+				pass
+
+			def getEpisodes(self, url):
+				pass
+
+			def getVideoSource(self, url):
+				pass
+
+- El método *isUrlForThisSite* verifica que la url dada como parametro corresponda a la página con la que la librería trabaja, retornar *True* o *False* según sea el caso.
+
+
+- El método *search* recibe como parametro el termino de busqueda (no esta optimizado para usarlo en una URL), debe regresar una lista de tuplas con los resultados de la busqueda, de la siguiente forma:
+
+		[
+			("titulo del resultado 1", "URL", "URL para imagen miniatura"),
+			("titulo del resultado 2", "URL", "URL para imagen miniatura")
+		]
+
+- El método *getEpisodes* recibe como parametro la URL de una serie, debe retornar una lista de tuplas con los episodios de la serie, de la siguiente forma:
+
+		[
+			("temporada 1 capitulo 1", "URL"),
+			("temporada 1 capitulo 2", "URL"),
+			("temporada 2 capitulo 1", "URL"),
+			("temporada 2 capitulo 2", "URL")
+		]
+
+- El método *getVideoSource* recibe como parametro la URL de un episodio o de una película, este debe retornar un *string* con la URL al origen del video (mp4), esto se puede hacer de varias formas pero casi siempre se necesita de algo de ingeniería inversa en la página web para ver de dónde y cómo se reproducen los videos.
+
+Finalmente añadir un objeto de la clase a la variable *sites* en el archivo *\_\_init\_\_.py*
+
+## Webs soportadas hasta ahora
 
 - playwarez.cc
 - serieshd.tv
+- cuevana3.io
 
 ## ToDo
 
 - Hacer que funcione con más páginas
-- crear un cliente web para la API
+- Crear un cliente web para la API
 
 ## Contributors
 

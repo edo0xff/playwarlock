@@ -22,6 +22,10 @@ class SiteBase:
         self.soup = BeautifulSoup
 
 
+    def _urlEncode(self, str):
+        return "+".join(str.split(" "))
+
+
     def isUrlForThisSite(self, url):
         if not self.hostname:
             print("[%s] site_hostname error" % type(self).__name__)

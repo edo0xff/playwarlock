@@ -121,6 +121,7 @@ Finalmente añadir un objeto de la clase a la variable *sites* en el archivo *\_
 - playwarez.cc
 - serieshd.tv
 - cuevana3.io
+- www3.animeflv.net
 
 ## ToDo
 

@@ -81,7 +81,7 @@ Rutas soportadas por la API:
 
 
 		class PaginaDeSeriesCOM:
-			def \_\_init\_\_(self):
+			def __init__(self):
 				super().__init__()
 				self.hostname = 'paginadeseries.com'
 
@@ -97,7 +97,7 @@ Rutas soportadas por la API:
 - En el constructor se inicializa la propiedad *hostname* para indicar con que sitio
 web trabaja la librería, esto es importante ya que la interfaz decidirá con que
 libraría descargar un video con base en este parámetro, comparando la URL de la serie
-o película con el hostname de la librería. 
+o película con el hostname de la librería.
 
 
 - El método *search* recibe como parametro el termino de busqueda (no esta optimizado para usarlo en una URL), debe regresar una lista de tuplas con los resultados de la busqueda, de la siguiente forma:

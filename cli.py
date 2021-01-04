@@ -18,7 +18,7 @@ if __name__ == '__main__':
 
     if args.search:
         for site in sites:
-            print("[%s] searching" % (type(site).__name__))
+            print("[%s] searching" % (site.hostname))
             results = site.search(args.search)
 
             if not results:
@@ -48,7 +48,7 @@ if __name__ == '__main__':
 
         for site in sites:
             if site.isUrlForThisSite(url):
-                print("[%s] downloading" % type(site).__name__)
+                print("[%s] downloading" % site.hostname)
                 video_source = site.getVideoSource(url)
 
                 if video_source:

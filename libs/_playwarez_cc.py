@@ -1,21 +1,12 @@
-import requests
-
-from bs4 import BeautifulSoup
+from . import base
 
 
-class PlaywarezCC:
+class PlaywarezCC(base.SiteBase):
 
 
     def __init__(self):
-        self.headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.5',
-            'Accept-Encoding': 'gzip, deflate',
-            'DNT': '1',
-            'Connection': 'keep-alive',
-            'Upgrade-Insecure-Requests': '1'
-        }
+        super().__init__()
+        self.hostname = 'playwarez.cc'
 
 
     def _getPvipVideoSource(self, iframe_src):
@@ -41,13 +32,13 @@ class PlaywarezCC:
           'd': 'pvip.nl'
         }
 
-        response = requests.post('https://pvip.nl/api/source/%s' % video_id, headers=headers, data=data)
+        response = self.requests.post('https://pvip.nl/api/source/%s' % video_id, headers=headers, data=data)
         response = response.json()
 
         if not response['data'] == 'Video not found or has been removed':
             for file in response['data']:
                 if file['label'] == '720p':
-                    response = requests.get(file['file'], headers=headers, allow_redirects=False)
+                    response = self.requests.get(file['file'], headers=headers, allow_redirects=False)
                     video_source = response.headers['Location']
                     return video_source
 
@@ -57,10 +48,10 @@ class PlaywarezCC:
 
 
     def _getVideoIframeSrc(self, url):
-        with requests.Session() as request:
+        with self.requests.Session() as request:
             response = request.get(url, headers=self.headers)
 
-            soup = BeautifulSoup(response.text, "html.parser")
+            soup = self.soup(response.text, "html.parser")
             iframe = soup.find('iframe')
 
         return iframe['src']
@@ -77,16 +68,12 @@ class PlaywarezCC:
         return filtered
 
 
-    def isUrlForThisSite(self, url):
-        return True if 'playwarez.cc' in url else False
-
-
     def search(self, query):
         results = []
 
-        with requests.Session() as request:
+        with self.requests.Session() as request:
             response = request.get("https://playwarez.cc/?s=%s" % "+".join(query.split(" ")), headers=self.headers)
-            soup = BeautifulSoup(response.text, "html.parser")
+            soup = self.soup(response.text, "html.parser")
             results += self._searchResultFilter(soup.find_all('div', {'class': 'ml-item'}))
 
             pagination = soup.find('ul', {'class': 'pagination'})
@@ -99,7 +86,7 @@ class PlaywarezCC:
 
             for pagination_link in pagination_links:
                 response = request.get(pagination_link['href'], headers=self.headers)
-                soup = BeautifulSoup(response.text, "html.parser")
+                soup = self.soup(response.text, "html.parser")
                 results += self._searchResultFilter(soup.find_all('div', {'class': 'ml-item'}))
 
         return results
@@ -108,10 +95,10 @@ class PlaywarezCC:
     def getEpisodes(self, url):
         results = []
 
-        with requests.Session() as request:
+        with self.requests.Session() as request:
             response = request.get(url, headers=self.headers)
 
-            soup = BeautifulSoup(response.text, "html.parser")
+            soup = self.soup(response.text, "html.parser")
             seasons = soup.find_all('div', {'class': 'tvseason'})
 
             for season in seasons:

@@ -8,6 +8,12 @@ app = Flask(__name__,
             static_folder='static')
 
 
+@app.after_request
+def access_control(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
+
+
 @app.route("/api/v0.1/search")
 def search():
     query = request.args.get('q')
@@ -41,13 +47,20 @@ def list_episodes():
 @app.route("/api/v0.1/video_source")
 def get_video_source():
     url = request.args.get('url')
+    redir = request.args.get('redir')
 
     if not url:
         return jsonify({'message':'missing argument: url'})
 
     for site in sites:
         if site.isUrlForThisSite(url):
-            return jsonify({'data': site.getVideoSource(url)})
+            video_source = site.getVideoSource(url)
+
+            if redir:
+                redirect(video_source);
+
+            else:
+                return jsonify({'data': video_source})
 
     return jsonify({'message': 'unsupported site'})
 

@@ -54,6 +54,7 @@ class WWW3AnimeFlvNET(base.SiteBase):
 
                 results.append((title, url))
 
+        results.reverse()
         return results
 
 

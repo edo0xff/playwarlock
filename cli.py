@@ -1,5 +1,6 @@
 import os
 import argparse
+import webbrowser
 
 from libs import downloader, sites
 
@@ -11,6 +12,7 @@ if __name__ == '__main__':
     parser.add_argument('-bd', '--batch-download', type=str, dest='batch_download')
     parser.add_argument('-s', '--search', type=str, dest='search')
     parser.add_argument('-d', '--download', type=str, dest='download')
+    parser.add_argument('-w', '--watch', type=str, dest='watch')
     parser.add_argument('-o', '--output', type=str, dest='output')
     parser.add_argument('-od', '--output-dir', type=str, dest='output_dir')
 
@@ -34,7 +36,7 @@ if __name__ == '__main__':
                 results = site.getEpisodes(args.list_episodes)
 
                 for title, url in results:
-                    print("%s, %s" % (title, url))
+                    print("%s, %s" % (title.replace(',',''), url))
 
                 break
 
@@ -42,6 +44,9 @@ if __name__ == '__main__':
         if not args.output:
             print(" > '--output-file' argument is missing.")
             exit()
+
+        if args.output_dir:
+            os.chdir(args.output_dir)
 
         url = args.download
         title = args.output
@@ -53,6 +58,20 @@ if __name__ == '__main__':
 
                 if video_source:
                     downloader.downloadVideo(video_source, title)
+
+                break
+
+    elif args.watch:
+
+        url = args.watch
+
+        for site in sites:
+            if site.isUrlForThisSite(url):
+                print("[%s] getting video" % site.hostname)
+                video_source = site.getVideoSource(url)
+
+                print(video_source)
+                webbrowser.open(video_source, new=0, autoraise=True)
 
                 break
 
